@@ -8,8 +8,10 @@ import (
 
 type userArr [60]userData
 type userData struct {
-	emailID string
-	name    string
+	emailID  string
+	password string
+	name     string
+	city     string
 }
 type error interface {
 	Error() string
@@ -29,25 +31,50 @@ func Connect() {
 }
 
 func FetchAllUsers() userArr {
-	var emailID string
-	// var name string
+	var emailID sql.NullString
+	var name sql.NullString
+	var password sql.NullString
+	var city sql.NullString
 	var ua userArr
 	i := 0
-	ud := userData{"", ""}
+	ud := userData{}
 
-	rows, err := db.Query("select emailID from users;")
+	rows, err := db.Query("select * from users;")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for rows.Next() {
-		err := rows.Scan(&emailID)
+		err := rows.Scan(&emailID, &password, &name, &city)
 		if err != nil {
 			log.Fatal(err)
 		}
-		ud.emailID = emailID
+		if emailID.Valid {
+			ud.emailID = emailID.String
+		} else {
+			ud.emailID = ""
+		}
+		if password.Valid {
+			ud.password = password.String
+		} else {
+			ud.password = ""
+		}
+		if name.Valid {
+			ud.name = name.String
+		} else {
+			ud.name = ""
+		}
+		if city.Valid {
+			ud.city = city.String
+		} else {
+			ud.city = ""
+		}
 		ua[i] = ud
 		i++
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
 	}
 	return ua
 }
