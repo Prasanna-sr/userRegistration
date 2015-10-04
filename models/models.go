@@ -6,12 +6,12 @@ import (
 	"log"
 )
 
-type userArr [60]userData
+type userArr []userData
 type userData struct {
-	emailID  string
-	password string
-	name     string
-	city     string
+	EmailID  string
+	Password string
+	Name     string
+	City     string
 }
 type error interface {
 	Error() string
@@ -36,7 +36,7 @@ func FetchAllUsers() userArr {
 	var password sql.NullString
 	var city sql.NullString
 	var ua userArr
-	i := 0
+
 	ud := userData{}
 
 	rows, err := db.Query("select * from users;")
@@ -50,27 +50,18 @@ func FetchAllUsers() userArr {
 			log.Fatal(err)
 		}
 		if emailID.Valid {
-			ud.emailID = emailID.String
-		} else {
-			ud.emailID = ""
+			ud.EmailID = emailID.String
 		}
 		if password.Valid {
-			ud.password = password.String
-		} else {
-			ud.password = ""
+			ud.Password = password.String
 		}
 		if name.Valid {
-			ud.name = name.String
-		} else {
-			ud.name = ""
+			ud.Name = name.String
 		}
 		if city.Valid {
-			ud.city = city.String
-		} else {
-			ud.city = ""
+			ud.City = city.String
 		}
-		ua[i] = ud
-		i++
+		ua = append(ua, ud)
 	}
 	err = rows.Err()
 	if err != nil {

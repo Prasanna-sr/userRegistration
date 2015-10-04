@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,7 +9,10 @@ import (
 )
 
 func GetAllUsers(response http.ResponseWriter, request *http.Request) {
-	fmt.Fprint(response, "all users are here !")
 	users := models.FetchAllUsers()
-	log.Print(users)
+	m, err := json.Marshal(users)
+	if err != nil {
+		log.Print(err)
+	}
+	fmt.Fprint(response, string(m))
 }
