@@ -42,3 +42,14 @@ City: "SF"
     password {string}
     city {string}
     name {string}
+
+
+**PUT /user** - update user information (by emailid)
+
+##### Headers
+	Content-type - application/json
+##### Body 
+    emailid {string}
+    password {string}
+    city {string}
+    name {string}
