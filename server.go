@@ -3,27 +3,16 @@ package main
 import (
 	"log"
 	"net/http"
-	// "net/url"
 	"user-registration/controllers"
 	"user-registration/models"
 )
 
 func main() {
 	port := "8080"
-	routeHandler()
+	http.HandleFunc("/user", methodHandler)
 	models.Connect()
 	log.Print("Server running in port " + port)
 	http.ListenAndServe(":"+port, nil)
-}
-
-func routeHandler() {
-	http.HandleFunc("/user", methodHandler)
-	http.HandleFunc("/user/", fnHandler)
-}
-
-func fnHandler(response http.ResponseWriter, request *http.Request) {
-	log.Print(request.URL)
-	log.Print(request.RequestURI)
 }
 
 func methodHandler(response http.ResponseWriter, request *http.Request) {

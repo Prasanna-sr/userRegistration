@@ -97,6 +97,11 @@ func FetchUser(emailid string) userData {
 
 func CreateUser(emailID string, password string, name string, city string) error {
 	res, err := db.Exec("insert into users values(?,?,?,?)", emailID, password, name, city)
-	log.Print(res)
-	return err
+	if err != nil {
+		return err
+	} else if res != nil {
+		return err
+	} else {
+		return err
+	}
 }
