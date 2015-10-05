@@ -11,6 +11,12 @@ import (
 type status struct {
 	Message string
 }
+type userData struct {
+	EmailID  string
+	Password string
+	Name     string
+	City     string
+}
 
 func GetAllUsers(response http.ResponseWriter, request *http.Request) {
 	users := models.FetchAllUsers()
@@ -32,12 +38,6 @@ func GetUser(response http.ResponseWriter, request *http.Request) {
 }
 
 func CreateUser(response http.ResponseWriter, request *http.Request) {
-	type userData struct {
-		EmailID  string
-		Password string
-		Name     string
-		City     string
-	}
 	ud := userData{}
 	err := json.NewDecoder(request.Body).Decode(&ud)
 	if err != nil {
