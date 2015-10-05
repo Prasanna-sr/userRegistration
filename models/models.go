@@ -69,3 +69,34 @@ func FetchAllUsers() userArr {
 	}
 	return ua
 }
+
+func FetchUser(emailid string) userData {
+	var emailID sql.NullString
+	var name sql.NullString
+	var password sql.NullString
+	var city sql.NullString
+	ud := userData{}
+	err := db.QueryRow("select * from users where emailid=?", emailid).Scan(&emailID, &password, &name, &city)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if emailID.Valid {
+		ud.EmailID = emailID.String
+	}
+	if password.Valid {
+		ud.Password = password.String
+	}
+	if name.Valid {
+		ud.Name = name.String
+	}
+	if city.Valid {
+		ud.City = city.String
+	}
+	return ud
+}
+
+func CreateUser(emailID string, password string, name string, city string) error {
+	res, err := db.Exec("insert into users values(?,?,?,?)", emailID, password, name, city)
+	log.Print(res)
+	return err
+}
